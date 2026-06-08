@@ -225,10 +225,10 @@ class Client:
             "hero_details": [
                 {
                     "items": [
-                                 {"position": 1, "base_heroitem_id": item_id} for item_id in hero.left_item_ids
-                             ] + [
-                                 {"position": -1, "base_heroitem_id": item_id} for item_id in hero.right_base_item_ids
-                             ],
+                        {"position": 1, "base_heroitem_id": item_id} for item_id in hero.left_item_ids
+                    ] + [
+                        {"position": -1, "base_heroitem_id": item_id} for item_id in hero.right_base_item_ids
+                    ],
                     "hero_id": hero.base_hero_id
                 } for hero in heroes_data
             ]
@@ -543,3 +543,19 @@ class Client:
 
     def getCaptcha(self) -> bytes:
         return self.sendRequest("bot/getcaptcha", method="GET")
+
+    def solveCaptcha(self, resp: int):
+        return self.sendRequest("bot/challengeresponse", {"resp": resp})
+
+    def getErrorsMessages(self, lang_id: str = "fa-IR"):
+        response = self.sendRequest("error/messages", {"lang_id": lang_id})
+        return response
+
+    def getConfig(self):
+        response = self.sendRequest("config.json", method="GET")
+        saveJson(response, 'config.json')
+        return response
+
+    def getLanguagepatch(self):
+        response = self.sendRequest("player/languagepatch")
+        return response
